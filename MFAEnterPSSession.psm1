@@ -28,11 +28,13 @@ function Invoke-MFAEnterPSSession {
     }
 }
 
-
-
-function Request-MFAOTP {
+function Request-MFAOTP ([string]$UserEmail) {
     # Replace this URL with the URL of your RequestMFAOTP Azure Function
-    $functionUrl = 'https://your-function-app.azurewebsites.net/api/otp?code=your-function-key'
+    if(!($UserEmail)){
+        $functionUrl = 'https://your-function-app.azurewebsites.net/api/otp?code=your-function-key'
+    } else{
+        $functionUrl = 'https://your-function-app.azurewebsites.net/api/otp?code=your-function-key&email=' + $UserEmail
+    }
 
     try {
         $response = Invoke-WebRequest -Uri $functionUrl -Method Get
